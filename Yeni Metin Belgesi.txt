@@ -1,0 +1,89 @@
+   //btnNext = (Button) findViewById(R.id.btnNext);
+        //btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            //public void onClick(View v) {
+                    //Intent nextPage = new Intent(MainActivity.this, CameraActivity.class);
+        //startActivity(nextPage);
+        //}
+                    //});
+
+        mTranslateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                identifyLanguage();
+            }
+        });
+
+
+        //captureImageBtn = findViewById(R.id.capture_image_btn);
+        //detectTextBtn = findViewById(R.id.detect_text_image_btn);
+        //imageView = findViewById(R.id.image_view);
+        //textView = findViewById(R.id.text_display);
+
+        //captureImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+                    //public void onClick(View v) {
+
+                    //dispatchTakePictureIntent();
+        //textView.setText("");
+        //}
+                    //});
+            // detectTextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+                    //public void onClick(View v) {
+                detectTextFromImage();
+        //}
+        //});
+        //}
+
+
+
+
+        //private void dispatchTakePictureIntent() {
+        //Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //try {
+        // startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        //} catch (ActivityNotFoundException e) {
+            // display error state to the user
+        //}
+        }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+        }
+    }
+    private void detectTextFromImage() {
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(imageBitmap);
+        FirebaseVisionTextDetector textDetector = FirebaseVision.getInstance().getVisionTextDetector();
+        FirebaseVisionTextDetector.detectInImage(FirebaseVisionImage).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+            @Override
+            public void onSuccess(FirebaseVisionText firebaseVisionText) {
+
+                displayTextFromImage(firebaseVisionText);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(MainActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.d("Error: " , e.getMessage());
+            }
+        });
+
+    }
+
+    private void displayTextFromImage(FirebaseVisionText firebaseVisionText) {
+        List<FirebaseVisionText.Block> blockList = FirebaseVisionText.getBlocks();
+        if (blockList.size() == 0){
+            Toast.makeText(this,"No Text Found in Image", Toast.LENGTH_SHORT).show();
+        }else{
+            for (FirebaseVisionText.Block block : firebaseVisionText.getBlocks()){
+                String text = block.getText();
+                textView.setText(text);
+            }
+        }
+    }
