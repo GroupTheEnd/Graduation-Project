@@ -1,2 +1,20 @@
 onur kaplan
 ayyüce
+4	External Interface Requirements
+
+4.1	User Interface
+
+In this section, we will describe the intermediate units that affect AR Translator Application.
+
+4.2	Hardware Interface
+
+System will have hardware requirements on Android and Firebase data base.
+
+4.3	Software Interface
+
+AR Translator project will consist of two main parts: Android studio and Firebase API. 
+And some software interfaces will be added to the project.
+
+4.4	Communication interfaces
+
+Due to the pandemic, we only communicate online meeting or by phone.
